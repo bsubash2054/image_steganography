@@ -1,9 +1,8 @@
+import math
 import os
 
 from PIL import Image
-from flask import request, send_file
-import app
-
+import datetime
 
 def genData(data):
     # list of binary codes
@@ -80,24 +79,14 @@ def encode(image, message):
         raise ValueError('Data is empty')
 
     newimg = Image.open(image)
-    encode_enc(newimg, message)
+    encode_enc(newimg, message + get_timestamp())
     filename = image.filename.split('.')[0]
     extension = image.filename.split('.').pop()
     encoded_filename = filename + '_encoded.' + extension
-    download_path = f'static/encoded_images/{encoded_filename}'
-    newimg.save(download_path)
+    encoded_image_path = f'static/encoded_images/{encoded_filename}'
+    newimg.save(encoded_image_path)
+    return encoded_image_path
 
-    # file_path = '/static/encoded.png'
-    # response = send_file(file_path, as_attachment=True, download_name='encoded_image.png')
-    # response = send_file(newimg, as_attachment=True, download_name=image.filename.split('.')[0])
-    return download_path
-    # new_img_name = input("Enter the name of new image(with extension) : ")
-    # newimg.save(new_img_name, str(new_img_name.split(".")[1].upper()))
-
-
-# def decode(image):
-#     d = ''
-#     return d
 
 def decode(img):
     image = Image.open(img)
@@ -121,3 +110,9 @@ def decode(img):
         data += chr(int(binstr, 2))
         if pixels[-1] % 2 != 0:
             return data
+
+
+def get_timestamp():
+     # __1712703795__
+    epoch = datetime.datetime.timestamp(datetime.datetime.now())
+    return f"__{math.floor(epoch)}__"

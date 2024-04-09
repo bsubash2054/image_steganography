@@ -38,14 +38,15 @@
             <form action="/encode-message" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="encodeImage">Select Image:</label>
-                    <input type="file" id="encodeImage" class="form-control mt-2" style="width: 300px">
+                    <input type="file" id="encodeImage" class="form-control mt-2" style="width: 70%">
+                    <img class="mt-4" id="encodePreview" src="#" alt="Image preview" height="300" />
                 </div>
                 <div class="form-group pt-4">
                     <label for="encodeMessage">Message:</label>
                     <textarea name="message" class="form-control mt-2" id="encodeMessage" rows="5"
                               placeholder="Enter message here..."></textarea>
                 </div>
-                <button id="encodeSubmit" type="button" class="btn btn-primary btn-lg btn-block mt-4">Submit</button>
+                <button style="width: 100%" id="encodeSubmit" type="button" class="btn btn-primary btn-lg btn-block mt-4">Submit</button>
             </form>
         </section>
         <section style="width: 70%">
@@ -53,12 +54,13 @@
             <form action="/decode-message" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="decodeImage">Select Image:</label>
-                    <input type="file" id="decodeImage" class="form-control mt-2" style="width: 300px">
+                    <input type="file" id="decodeImage" class="form-control mt-2" style="width: 70%">
+                    <img class="mt-4" id="decodePreview" src="#" alt="Image preview" height="300" />
                 </div>
                 <div id="decodedMessage">
 
                 </div>
-                <button id="decodeSubmit" type="button" class="btn btn-primary btn-lg btn-block mt-4">Submit</button>
+                <button style="width: 200px" id="decodeSubmit" type="button" class="btn btn-primary btn-lg btn-block mt-5">Submit</button>
             </form>
         </section>
     </div>
@@ -73,6 +75,29 @@
 
 <script>
     $(function() {
+    // Preview image for Encode tab
+    $('#encodePreview').hide()
+    encodeImage.onchange = evt => {
+  const [file] = encodeImage.files
+  if (file) {
+    $('#encodePreview').show()
+    encodePreview.src = URL.createObjectURL(file)
+  }
+}
+
+// Preview image for Decode tab
+    $('#decodePreview').hide()
+    decodeImage.onchange = evt => {
+  const [file] = decodeImage.files
+  if (file) {
+    $('#decodePreview').show()
+    decodePreview.src = URL.createObjectURL(file)
+  }
+}
+
+
+
+
     //
     //
     // ENCODING THE MESSAGE
@@ -137,9 +162,43 @@
             processData: false,
             success: function(data) {
             // server returns the decoded message
+                trimmed = data.replace(/(\r\n|\n|\r)/gm, "");
+                trimmed = trimmed.trim();
+                // Most of the time, when there is no encoded message in an image, character "ÿ" was displayed.
+                // So displaying error message if we see this character.
                 empty_string = "ÿ"
+                if(trimmed === empty_string){
+                    $('#decodedMessage').show()
+                    $('#decodedMessage').html("<br><span style='color: red;'>The image doesn't contain any encoded message!</span>")
+                    return;
+                }
+                var epoch_pattern = "__1712703795__"
+                dtString = ''
+                if(trimmed.endsWith('__') && trimmed.length > epoch_pattern.length){
+                    epoch = data.substr(data.length - epoch_pattern.length)
+                    epoch = epoch.replaceAll('__', '')
+                    data = data.substring(0, data.length - epoch_pattern.length - 1);
+                    var dt = new Date(0);
+                    dt.setUTCSeconds(Number(epoch));
+                    dt = dt.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric'
+                    })
+                    if(dt.length > 0){
+                        dtString = "<div style='width: 100%;display: block;'><i style='font-size:16px'>Message encoded on: " + dt + "</i></div>"
+                    }
+                    console.log(dt.length)
+                    console.log(dt)
+                    console.log(epoch)
+                    console.log(data)
+                }
+
                 $('#decodedMessage').show()
-                $('#decodedMessage').html("<br><strong>The decoded message is:</strong><br><h3>" + data +"</h3>")
+                $('#decodedMessage').html("<br><strong>The decoded message is:</strong><br><h3 class='mt-3'>" + data +"</h3>" + dtString)
                 console.log(data);
                 console.log('Success!');
 
