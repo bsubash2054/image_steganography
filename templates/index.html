@@ -172,12 +172,13 @@
                     $('#decodedMessage').html("<br><span style='color: red;'>The image doesn't contain any encoded message!</span>")
                     return;
                 }
+                // Extract epoch time from decoded message and display the date and time the message was encoded.
                 var epoch_pattern = "__1712703795__"
                 dtString = ''
                 if(trimmed.endsWith('__') && trimmed.length > epoch_pattern.length){
                     epoch = data.substr(data.length - epoch_pattern.length)
                     epoch = epoch.replaceAll('__', '')
-                    data = data.substring(0, data.length - epoch_pattern.length - 1);
+                    data = data.substring(0,data.length - epoch_pattern.length - 1);
                     var dt = new Date(0);
                     dt.setUTCSeconds(Number(epoch));
                     dt = dt.toLocaleDateString('en-US', {
@@ -189,12 +190,8 @@
                         second: 'numeric'
                     })
                     if(dt.length > 0){
-                        dtString = "<div style='width: 100%;display: block;'><i style='font-size:16px'>Message encoded on: " + dt + "</i></div>"
+                        dtString = "<div><i style='font-size:16px'>Message encoded on: " + dt + "</i></div>"
                     }
-                    console.log(dt.length)
-                    console.log(dt)
-                    console.log(epoch)
-                    console.log(data)
                 }
 
                 $('#decodedMessage').show()
