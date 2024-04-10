@@ -77,39 +77,41 @@
     $(function() {
     // Preview image for Encode tab
     $('#encodePreview').hide()
-    encodeImage.onchange = evt => {
-  const [file] = encodeImage.files
-  if (file) {
-    $('#encodePreview').show()
-    encodePreview.src = URL.createObjectURL(file)
-  }
-}
+        encodeImage.onchange = evt => {
+      const [file] = encodeImage.files
+      if (file) {
+        $('#encodePreview').show()
+        encodePreview.src = URL.createObjectURL(file)
+      }
+    }
 
-// Preview image for Decode tab
-    $('#decodePreview').hide()
-    decodeImage.onchange = evt => {
-  const [file] = decodeImage.files
-  if (file) {
-    $('#decodePreview').show()
-    decodePreview.src = URL.createObjectURL(file)
-  }
-}
+    // Preview image for Decode tab
+        $('#decodePreview').hide()
+        decodeImage.onchange = evt => {
+      const [file] = decodeImage.files
+      if (file) {
+        $('#decodePreview').show()
+        decodePreview.src = URL.createObjectURL(file)
+      }
+    }
 
 
 
 
     //
     //
-    // ENCODING THE MESSAGE
+    // ENCODING THE MESSAGE: UPLOAD IMAGE & MESSAGE TO SERVER
     //
     //
     $('#encodeSubmit').on('click',function(e) {
         e.preventDefault();
         var message = $('textarea#encodeMessage').val();
+        message = message.replaceAll(/\n/g , "\\n")
         if(message.length == 0){
             alert('Message cannot be empty!')
             return;
         }
+        console.log(message)
         var file = $('#encodeImage').prop('files')[0];
         var form_data = new FormData();
         form_data.append('image',file, file.name);
@@ -122,7 +124,7 @@
             cache: false,
             processData: false,
             success: function(data) {
-            // server returns the location of encoded file
+            // server returns the location of encoded file, now we download the image from that location
                 url = data
                 image_name = data.split('/').pop()
                 var a = document.createElement('a');
@@ -144,7 +146,7 @@
 
     //
     //
-    // DECODING THE MESSAGE
+    // DECODING THE MESSAGE: SERVER RETURNS THE DECODED MESSAGE
     //
     //
     $('#decodeSubmit').on('click',function(e) {
@@ -161,9 +163,10 @@
             cache: false,
             processData: false,
             success: function(data) {
+            console.log(data)
             // server returns the decoded message
                 trimmed = data.replace(/(\r\n|\n|\r)/gm, "");
-                trimmed = trimmed.trim();
+                trimmed = data.trim();
                 // Most of the time, when there is no encoded message in an image, character "ÿ" was displayed.
                 // So displaying error message if we see this character.
                 empty_string = "ÿ"
@@ -175,10 +178,10 @@
                 // Extract epoch time from decoded message and display the date and time the message was encoded.
                 var epoch_pattern = "__1712703795__"
                 dtString = ''
-                if(trimmed.endsWith('__') && trimmed.length > epoch_pattern.length){
+                if(trimmed.endsWith('__') && trimmed.length >= epoch_pattern.length){
                     epoch = data.substr(data.length - epoch_pattern.length)
                     epoch = epoch.replaceAll('__', '')
-                    data = data.substring(0,data.length - epoch_pattern.length - 1);
+                    data = data.substring(0,data.length - epoch_pattern.length);
                     var dt = new Date(0);
                     dt.setUTCSeconds(Number(epoch));
                     dt = dt.toLocaleDateString('en-US', {
@@ -193,9 +196,10 @@
                         dtString = "<div><i style='font-size:16px'>Message encoded on: " + dt + "</i></div>"
                     }
                 }
-
+                data = data.replaceAll('\\n', '<br>')
                 $('#decodedMessage').show()
-                $('#decodedMessage').html("<br><strong>The decoded message is:</strong><br><h3 class='mt-3'>" + data +"</h3>" + dtString)
+                var decodedMessageHtml = "<br><strong>The decoded message is:</strong><br><h3 class='mt-3'>" + data +"</h3>" + dtString
+                $('#decodedMessage').html(decodedMessageHtml)
                 console.log(data);
                 console.log('Success!');
 
