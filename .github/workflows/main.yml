@@ -3,7 +3,7 @@ name: Docker Build and Push
 on:
   push:
     branches:
-      - main  # Adjust the branch as needed
+      - Ajay  # Adjust the branch as needed
 
 permissions:
       id-token: write
