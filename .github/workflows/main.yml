@@ -21,6 +21,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::544234170512:role/GithubRole
           aws-region: us-east-1
+          role-session-name: MySessionName
           #audience: sts.amazonaws.com
 
 
