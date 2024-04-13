@@ -10,13 +10,11 @@ def home():
 
 @app.route("/encode-message", methods=['POST','GET'])
 def encode_message():
-    try:
         if request.method == 'POST':
             image = request.files.get('image')
             message = request.values.get("message")
             return steganography.encode(image, message)
-    except Exception as e:
-        return ({"success": False, "error": str(e)}), 500    
+      
 
     
 @app.route("/decode-message", methods=['POST','GET'])
