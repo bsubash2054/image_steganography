@@ -1,4 +1,4 @@
-# Project: Steganography with Python
+![image](https://github.com/bsubash2054/image_steganography/assets/162769546/596ef4c7-f1f3-4a87-87a4-cf6c9521ef64)# Project: Steganography with Python
 
 **Group Project by:**
 
@@ -87,3 +87,8 @@ This project includes a GitHub Actions workflow to automatically build and push 
    - Builds the Docker image.
    - Tags the image with the Git commit ID.
    - Pushes the image to Amazon ECR.
+## Project URL
+
+![image](https://github.com/bsubash2054/image_steganography/assets/162769546/f08da8e4-29eb-472e-9046-a424c6e432ab)
+
+http://a02d3cf2432ea409cb955949bfaca586-50435301.us-east-1.elb.amazonaws.com 
