@@ -1,4 +1,4 @@
-![image](https://github.com/bsubash2054/image_steganography/assets/162769546/596ef4c7-f1f3-4a87-87a4-cf6c9521ef64)# Project: Steganography with Python
+# Project: Steganography with Python
 
 **Group Project by:**
 
