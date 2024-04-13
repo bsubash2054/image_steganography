@@ -9,8 +9,8 @@ Clone the repository:
 
 bash
 Copy code
-git clone https://github.com/your-username/steganography-flask.git
-cd steganography-flask
+git clone https://github.com/bsubash2054/image_steganography.git
+cd image_steganography
 Install the required packages:
 
 bash
