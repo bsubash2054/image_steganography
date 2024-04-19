@@ -92,3 +92,4 @@ This project includes a GitHub Actions workflow to automatically build and push 
 ![image](https://github.com/bsubash2054/image_steganography/assets/162769546/f08da8e4-29eb-472e-9046-a424c6e432ab)
 
 http://a02d3cf2432ea409cb955949bfaca586-50435301.us-east-1.elb.amazonaws.com 
+THe load balancer URL might not be available as EKS Cluster will be deleted to save up on costs.
