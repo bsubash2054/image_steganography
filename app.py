@@ -4,7 +4,6 @@ from encode_object import EncodeObject
 
 app = Flask(__name__)
 
-
 # Route for displaying home screen. This is the default route of the site.
 @app.route("/")
 def home():
