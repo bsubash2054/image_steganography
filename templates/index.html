@@ -162,7 +162,7 @@
             processData: false,
             success: function(data) {
             console.log(data)
-            // server returns the decoded message
+            // server returns the decoded text (message + timestamp)
                 trimmed = data.replace(/(\r\n|\n|\r)/gm, "");
                 trimmed = data.trim();
                 // Most of the time, when there is no encoded message in an image, character "ÿ" was displayed.
@@ -195,6 +195,8 @@
                     }
                 }
                 data = data.replaceAll('\\n', '<br>')
+
+                // showing the decoded message along with the date and time it was decoded.
                 $('#decodedMessage').show()
                 var decodedMessageHtml = "<br><strong>The decoded message is:</strong><br><h3 class='mt-3'>" + data +"</h3>" + dtString
                 $('#decodedMessage').html(decodedMessageHtml)
