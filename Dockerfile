@@ -1,22 +1,21 @@
-# Use the official Python image as the base image
-FROM python:3.9-slim
+FROM python:3.12
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+RUN mkdir /work
+COPY . /work
+WORKDIR /work
+RUN ls
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
 
-# Set the working directory in the container
-WORKDIR /app
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=8000
+ENV FLASK_DEBUG=0
 
-# Copy the dependencies file to the working directory
-COPY requirements.txt /app/
+# Expose the Flask port
+EXPOSE 8000
 
-# Install any dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-# Copy the rest of the application code to the working directory
-COPY . /app/
-
-# Run Gunicorn with the specified options
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "flaskget:app"]
+# Command to run the Flask application
+CMD ["flask", "run"]
