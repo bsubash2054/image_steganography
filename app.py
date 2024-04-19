@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import steganography
+from encode_object import EncodeObject
 
 app = Flask(__name__)
 
@@ -20,7 +21,8 @@ def encode_message():
     if request.method == 'POST':
         image = request.files.get('image')
         message = request.values.get("message")
-        return steganography.encode(image, message)
+        encode_object = EncodeObject(image, message)
+        return steganography.encode(encode_object)
 
 
 # Route for decoding messages. Only accepts POST requests

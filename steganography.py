@@ -70,13 +70,15 @@ def encode_enc(new_img, data):
             x += 1
 
 
-def encode(image, message):
+def encode(encode_object):
     """
     The top level function that performs encoding of message inside image.
-    :param image: The image file received from the user/browser.
-    :param message: The message text that is to be included inside the image.
+    :param encode_object: Object that contains image and message. Can incorporate multiple other parameters
+    in case we decide to extend the features and this functions needs more parameters.
     :return: The path of the encoded image.
     """
+    message = encode_object.message
+    image = encode_object.image
     # Throw error if the message is empty.
     if len(message) == 0:
         raise ValueError('Data is empty')
